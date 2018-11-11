@@ -24,8 +24,8 @@ public class MirrorApplication {
 		SpringApplication.run(MirrorApplication.class, args);
 	}
 
-	@Value("${feign.openWeather.appid}")
-	private String appid;
+	@Value("${feign.openWeather.apiKey}")
+	private String apiKey;
 
 	@Value("${feign.openWeather.id}")
 	private String id;
@@ -35,7 +35,7 @@ public class MirrorApplication {
 
 	@RequestMapping("/")
 	String home() {
-		return openWeatherClient.actualWeatherInfo(appid, id, units);
+		return openWeatherClient.actualWeatherInfo(apiKey, id, units);
 	}
 }
 
