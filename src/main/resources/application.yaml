@@ -7,5 +7,5 @@ feign:
   openWeather:
     url: "http://api.openweathermap.org/data/2.5"
     id: "3056523"
-    appid: "1e96dde2ea8dafa8adb0446b7294bbe4"
+    apiKey: "1e96dde2ea8dafa8adb0446b7294bbe4"
     units: "metric"

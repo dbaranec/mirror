@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface OpenWeatherClient {
 
     @RequestMapping(method = RequestMethod.GET, value = "/weather")
-    String actualWeatherInfo(@RequestParam(value = "appid") String appid,
+    String actualWeatherInfo(@RequestParam(value = "apiKey") String apiKey,
             @RequestParam(value = "id") String id, @RequestParam(value = "units") String units);
 
 }
