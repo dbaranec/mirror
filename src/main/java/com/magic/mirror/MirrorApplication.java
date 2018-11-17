@@ -10,33 +10,30 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.magic.mirror.clients.OpenWeatherClient;
+import com.magic.mirror.model.ActualWeatherRequest;
+import com.magic.mirror.model.ActualWeatherResponse;
 
 @RestController
 @SpringBootApplication
 @EnableFeignClients
-@ComponentScan
+@ComponentScan()
 public class MirrorApplication {
 
-	@Autowired
-	OpenWeatherClient openWeatherClient;
+    @Autowired
+    OpenWeatherClient openWeatherClient;
 
-	public static void main(String[] args) {
-		SpringApplication.run(MirrorApplication.class, args);
-	}
+    @Autowired
+    ActualWeatherRequest actualWeatherRequest;
 
-	@Value("${feign.openWeather.apiKey}")
-	private String apiKey;
+    public static void main(String[] args) {
+        SpringApplication.run(MirrorApplication.class, args);
+    }
 
-	@Value("${feign.openWeather.id}")
-	private String id;
-
-	@Value("${feign.openWeather.units}")
-	private String units;
-
-	@RequestMapping("/")
-	String home() {
-		return openWeatherClient.actualWeatherInfo(apiKey, id, units);
-	}
+    @RequestMapping("/actualWeather")
+    ActualWeatherResponse getActualWeather() {
+        return openWeatherClient.actualWeatherInfo(actualWeatherRequest.getApiKey(), actualWeatherRequest.getId(),
+                actualWeatherRequest.getUnits());
+    }
 }
 
 
