@@ -9,3 +9,16 @@ feign:
     id: "3061184" #SA 3061184  #ZH 3056523
     apiKey: "1e96dde2ea8dafa8adb0446b7294bbe4"
     units: "metric"
+
+  nameDay:
+    url: "https://api.abalin.net/get"
+    country: "fr"
+    token: "Chrome"
+
+  qoutes:
+    url: "https://api.forismatic.com/api/1.0/"
+    method: "getQuote"
+    key: "0"
+    format: "json"
+    lang: "ru"
+    token: "Chrome"

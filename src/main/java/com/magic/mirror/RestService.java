@@ -4,9 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.magic.mirror.clients.AbalinClient;
 import com.magic.mirror.clients.OpenWeatherClient;
-import com.magic.mirror.model.ActualWeatherInfoRequest;
-import com.magic.mirror.model.ActualWeatherInfoResponse;
+import com.magic.mirror.clients.ForismaticClient;
+import com.magic.mirror.model.ActualWeatherTodayRequest;
+import com.magic.mirror.model.ActualWeatherTodayResponse;
+import com.magic.mirror.model.NameDayTodayRequest;
+import com.magic.mirror.model.NameDayTodayResponse;
+import com.magic.mirror.model.QouteRequest;
+import com.magic.mirror.model.QouteResponse;
 
 @RestController
 public class RestService {
@@ -15,11 +21,35 @@ public class RestService {
     OpenWeatherClient openWeatherClient;
 
     @Autowired
-    ActualWeatherInfoRequest actualWeatherInfoRequest;
+    AbalinClient abalinClient;
 
-    @RequestMapping("/actualWeather")
-    ActualWeatherInfoResponse getActualWeather() {
-        return openWeatherClient.actualWeatherInfo(actualWeatherInfoRequest.getApiKey(), actualWeatherInfoRequest.getId(),
-                actualWeatherInfoRequest.getUnits());
+    @Autowired
+    ForismaticClient forismaticClient;
+
+    @Autowired
+    ActualWeatherTodayRequest actualWeatherTodayRequest;
+
+    @Autowired
+    NameDayTodayRequest nameDayTodayRequest;
+
+    @Autowired
+    QouteRequest qouteRequest;
+
+    @RequestMapping("/getActualWeatherToday")
+    ActualWeatherTodayResponse getActualWeather() {
+        return openWeatherClient
+                .actualWeatherToday(actualWeatherTodayRequest.getApiKey(), actualWeatherTodayRequest.getId(),
+                        actualWeatherTodayRequest.getUnits());
+    }
+
+    @RequestMapping("/getNameDayToday")
+    NameDayTodayResponse getNameDayToday() {
+        return abalinClient.nameDayToday(nameDayTodayRequest.getCountry(),nameDayTodayRequest.getToken());
+    }
+
+    @RequestMapping("/getQoute")
+    QouteResponse getQoute() {
+        return forismaticClient.getQoute(qouteRequest.getMethod(), qouteRequest.getKey(), qouteRequest.getFormat(),
+                qouteRequest.getLang(), qouteRequest.getToken());
     }
 }

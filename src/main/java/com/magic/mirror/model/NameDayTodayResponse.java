@@ -7,18 +7,14 @@ import lombok.Getter;
 
 @Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ActualWeatherResponse {
+public class NameDayTodayResponse {
 
-    @JsonProperty("name")
-    String city;
-    Main main;
-
+    Data data;
 
     @Getter
-    public class Main {
+    public class Data {
 
-        String temp;
-        String temp_min;
-        String temp_max;
+        @JsonProperty("name_sk")
+        String nameDayToday;
     }
 }
