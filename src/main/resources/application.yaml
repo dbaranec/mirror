@@ -12,7 +12,7 @@ feign:
 
   nameDay:
     url: "https://api.abalin.net/get"
-    country: "fr"
+    country: "sk"
     token: "Chrome"
 
   qoutes:
@@ -20,5 +20,5 @@ feign:
     method: "getQuote"
     key: "0"
     format: "json"
-    lang: "ru"
+    lang: "en"
     token: "Chrome"
