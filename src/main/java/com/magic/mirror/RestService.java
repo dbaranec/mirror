@@ -1,6 +1,7 @@
 package com.magic.mirror;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,6 +16,7 @@ import com.magic.mirror.model.QouteRequest;
 import com.magic.mirror.model.QouteResponse;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 public class RestService {
 
     @Autowired
@@ -44,12 +46,19 @@ public class RestService {
 
     @RequestMapping("/getNameDayToday")
     NameDayTodayResponse getNameDayToday() {
-        return abalinClient.nameDayToday(nameDayTodayRequest.getCountry(),nameDayTodayRequest.getToken());
+        return abalinClient.nameDayToday(nameDayTodayRequest.getCountry(), nameDayTodayRequest.getToken());
     }
 
     @RequestMapping("/getQoute")
     QouteResponse getQoute() {
-        return forismaticClient.getQoute(qouteRequest.getMethod(), qouteRequest.getKey(), qouteRequest.getFormat(),
-                qouteRequest.getLang(), qouteRequest.getToken());
+
+        QouteResponse qoute = forismaticClient
+                .getQoute(qouteRequest.getMethod(), qouteRequest.getKey(), qouteRequest.getFormat(),
+                        qouteRequest.getLang(), qouteRequest.getToken());
+        if (qoute.getQuoteAuthor().isEmpty()) {
+            qoute.setQuoteAuthor("Anonymous");
+        }
+
+        return qoute;
     }
 }
