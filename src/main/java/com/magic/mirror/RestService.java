@@ -6,10 +6,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.magic.mirror.clients.AbalinClient;
-import com.magic.mirror.clients.OpenWeatherClient;
 import com.magic.mirror.clients.ForismaticClient;
+import com.magic.mirror.clients.OpenWeatherClient;
 import com.magic.mirror.model.ActualWeatherTodayRequest;
 import com.magic.mirror.model.ActualWeatherTodayResponse;
+import com.magic.mirror.model.GetActualWeatherTodayResponse;
+import com.magic.mirror.model.GetNameDayTodayResponse;
 import com.magic.mirror.model.NameDayTodayRequest;
 import com.magic.mirror.model.NameDayTodayResponse;
 import com.magic.mirror.model.QouteRequest;
@@ -20,33 +22,41 @@ import com.magic.mirror.model.QouteResponse;
 public class RestService {
 
     @Autowired
-    OpenWeatherClient openWeatherClient;
+    private OpenWeatherClient openWeatherClient;
 
     @Autowired
-    AbalinClient abalinClient;
+    private AbalinClient abalinClient;
 
     @Autowired
-    ForismaticClient forismaticClient;
+    private ForismaticClient forismaticClient;
 
     @Autowired
-    ActualWeatherTodayRequest actualWeatherTodayRequest;
+    private ActualWeatherTodayRequest actualWeatherTodayRequest;
 
     @Autowired
-    NameDayTodayRequest nameDayTodayRequest;
+    private NameDayTodayRequest nameDayTodayRequest;
 
     @Autowired
-    QouteRequest qouteRequest;
+    private QouteRequest qouteRequest;
 
     @RequestMapping("/getActualWeatherToday")
-    ActualWeatherTodayResponse getActualWeather() {
-        return openWeatherClient
+    GetActualWeatherTodayResponse getActualWeather() {
+
+        ActualWeatherTodayResponse response = openWeatherClient
                 .actualWeatherToday(actualWeatherTodayRequest.getApiKey(), actualWeatherTodayRequest.getId(),
                         actualWeatherTodayRequest.getUnits());
+
+        return GetActualWeatherTodayResponse.builder().city(response.getCity()).temp(response.getMain().getTemp())
+                .build();
     }
 
     @RequestMapping("/getNameDayToday")
-    NameDayTodayResponse getNameDayToday() {
-        return abalinClient.nameDayToday(nameDayTodayRequest.getCountry(), nameDayTodayRequest.getToken());
+    GetNameDayTodayResponse getNameDayToday() {
+
+        NameDayTodayResponse response = abalinClient
+                .nameDayToday(nameDayTodayRequest.getCountry(), nameDayTodayRequest.getToken());
+
+        return GetNameDayTodayResponse.builder().nameDayToday(response.getData().getNameDayToday()).build();
     }
 
     @RequestMapping("/getQoute")

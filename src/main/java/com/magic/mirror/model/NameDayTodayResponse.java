@@ -12,6 +12,7 @@ public class NameDayTodayResponse {
     Data data;
 
     @Getter
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public class Data {
 
         @JsonProperty("name_sk")
