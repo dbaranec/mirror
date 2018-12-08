@@ -11,4 +11,5 @@ public class GetActualWeatherTodayResponse {
 
     String city;
     String temp;
+    String icon;
 }

@@ -47,6 +47,7 @@ public class RestService {
                         actualWeatherTodayRequest.getUnits());
 
         return GetActualWeatherTodayResponse.builder().city(response.getCity()).temp(response.getMain().getTemp())
+                .icon(response.getWeathers().iterator().next().getIcon())
                 .build();
     }
 

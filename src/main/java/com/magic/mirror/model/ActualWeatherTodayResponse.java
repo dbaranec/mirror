@@ -1,5 +1,7 @@
 package com.magic.mirror.model;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -14,11 +16,21 @@ public class ActualWeatherTodayResponse {
 
     Main main;
 
+    @JsonProperty("weather")
+    List<Weather> weathers;
+
     @Getter
     @JsonIgnoreProperties(ignoreUnknown = true)
     public class Main {
 
         String temp;
+    }
+
+    @Getter
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Weather {
+
+        String icon;
     }
 
 }
