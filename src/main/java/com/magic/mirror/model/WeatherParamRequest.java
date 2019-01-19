@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Component
-public class ActualWeatherTodayRequest {
+public class WeatherParamRequest {
 
     @Value("${feign.openWeather.apiKey}")
     public String apiKey;

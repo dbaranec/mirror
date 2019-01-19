@@ -7,9 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class GetActualWeatherTodayResponse {
+public class NameDayTodayDto {
 
-    String city;
-    String temp;
-    String icon;
+    String nameDayToday;
 }
