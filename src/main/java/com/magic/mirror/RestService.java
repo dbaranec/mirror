@@ -19,6 +19,7 @@ import com.magic.mirror.model.NameDayTodayResponse;
 import com.magic.mirror.model.QouteRequest;
 import com.magic.mirror.model.QouteResponse;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
@@ -63,7 +64,7 @@ public class RestService {
     }
 
     @RequestMapping("/getForecastWeather")
-    ForecastWeatherDto getForecastWeather() {
+    List<ForecastWeatherDto> getForecastWeather() {
         ForecastWeatherResponse response = openWeatherClient
                 .forecastWeatherList(weatherParamRequest.getApiKey(), weatherParamRequest.getId(),
                         weatherParamRequest.getUnits());
@@ -89,25 +90,31 @@ public class RestService {
         String dayFour = getDate(calendar , 1);
         String dayFourName = dayNames[calendar.get(Calendar.DAY_OF_WEEK)];
 
-        ForecastWeatherDto forecastWeatherDto = ForecastWeatherDto.builder().build();
-        List<ForecastWeatherDto.ForecastInfor> forecastInforList = new ArrayList<>();
+        List<ForecastWeatherDto> forecastWeatherDto = new ArrayList<>();
 
         List<ForecastWeatherResponse.ForecastWeatherInfo> forecastWeatherInfos = response.getForecastWeatherInfos();
+
+
+
+
         for (ForecastWeatherResponse.ForecastWeatherInfo info : forecastWeatherInfos) {
 
             String forecastTime = " 15:00:00";
+
+            BigDecimal bd = new BigDecimal(info.getMain().getTemp());
+            BigDecimal rounded = bd.setScale(0, BigDecimal.ROUND_CEILING);
+
             if (info.getDt_txt().contains(dayOne + forecastTime)) {
-                forecastInforList.add(ForecastWeatherDto.ForecastInfor.builder().dayName(dayOneName).icon(info.getWeathers().iterator().next().getIcon()).temp(info.getMain().getTemp()).build());
+                forecastWeatherDto.add(ForecastWeatherDto.builder().dayName(dayOneName).icon(info.getWeathers().iterator().next().getIcon()).temp(String.valueOf(rounded)).build());
             } else if (info.getDt_txt().contains(dayTwo + forecastTime)) {
-                forecastInforList.add(ForecastWeatherDto.ForecastInfor.builder().dayName(dayTwoName).icon(info.getWeathers().iterator().next().getIcon()).temp(info.getMain().getTemp()).build());
+                forecastWeatherDto.add(ForecastWeatherDto.builder().dayName(dayTwoName).icon(info.getWeathers().iterator().next().getIcon()).temp(String.valueOf(rounded)).build());
             } else if (info.getDt_txt().contains(dayThree + forecastTime)) {
-                forecastInforList.add(ForecastWeatherDto.ForecastInfor.builder().dayName(dayThreeName).icon(info.getWeathers().iterator().next().getIcon()).temp(info.getMain().getTemp()).build());
+                forecastWeatherDto.add(ForecastWeatherDto.builder().dayName(dayThreeName).icon(info.getWeathers().iterator().next().getIcon()).temp(String.valueOf(rounded)).build());
             } else if (info.getDt_txt().contains(dayFour + forecastTime)) {
-                forecastInforList.add(ForecastWeatherDto.ForecastInfor.builder().dayName(dayFourName).icon(info.getWeathers().iterator().next().getIcon()).temp(info.getMain().getTemp()).build());
+                forecastWeatherDto.add(ForecastWeatherDto.builder().dayName(dayFourName).icon(info.getWeathers().iterator().next().getIcon()).temp(String.valueOf(rounded)).build());
             }
         }
 
-        forecastWeatherDto.setForecastInfors(forecastInforList);
 
         return forecastWeatherDto;
     }
