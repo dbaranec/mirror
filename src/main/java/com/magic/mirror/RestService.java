@@ -58,7 +58,10 @@ public class RestService {
                 .actualWeatherToday(weatherParamRequest.getApiKey(), weatherParamRequest.getId(),
                         weatherParamRequest.getUnits());
 
-        return ActualWeatherTodayDto.builder().city(response.getCity()).temp(response.getMain().getTemp())
+        BigDecimal bd = new BigDecimal(response.getMain().getTemp());
+        BigDecimal roundedTemp = bd.setScale(0, BigDecimal.ROUND_HALF_UP);
+
+        return ActualWeatherTodayDto.builder().city(response.getCity()).temp(roundedTemp.toString())
                 .icon(response.getWeathers().iterator().next().getIcon())
                 .build();
     }
@@ -102,7 +105,7 @@ public class RestService {
             String forecastTime = " 15:00:00";
 
             BigDecimal bd = new BigDecimal(info.getMain().getTemp());
-            BigDecimal rounded = bd.setScale(0, BigDecimal.ROUND_CEILING);
+            BigDecimal rounded = bd.setScale(0, BigDecimal.ROUND_HALF_UP);
 
             if (info.getDt_txt().contains(dayOne + forecastTime)) {
                 forecastWeatherDto.add(ForecastWeatherDto.builder().dayName(dayOneName).icon(info.getWeathers().iterator().next().getIcon()).temp(String.valueOf(rounded)).build());
