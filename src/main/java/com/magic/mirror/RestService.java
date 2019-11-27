@@ -1,23 +1,26 @@
 package com.magic.mirror;
 
-import com.magic.mirror.model.ForecastWeatherDto;
-import com.magic.mirror.model.ForecastWeatherResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.magic.mirror.clients.AbalinClient;
 import com.magic.mirror.clients.ForismaticClient;
 import com.magic.mirror.clients.OpenWeatherClient;
-import com.magic.mirror.model.WeatherParamRequest;
-import com.magic.mirror.model.ActualWeatherTodayResponse;
 import com.magic.mirror.model.ActualWeatherTodayDto;
+import com.magic.mirror.model.ActualWeatherTodayResponse;
+import com.magic.mirror.model.ForecastWeatherDto;
+import com.magic.mirror.model.ForecastWeatherResponse;
+import com.magic.mirror.model.Geolocation;
 import com.magic.mirror.model.NameDayTodayDto;
 import com.magic.mirror.model.NameDayTodayRequest;
 import com.magic.mirror.model.NameDayTodayResponse;
 import com.magic.mirror.model.QouteRequest;
 import com.magic.mirror.model.QouteResponse;
+import com.magic.mirror.model.WeatherParamRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 import java.text.DateFormat;
@@ -28,6 +31,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -51,11 +55,15 @@ public class RestService {
     @Autowired
     private QouteRequest qouteRequest;
 
-    @RequestMapping("/getActualWeatherToday")
-    ActualWeatherTodayDto getActualWeather() {
+    @RequestMapping(value = "/getActualWeatherToday", method = RequestMethod.POST, consumes = "application/json")
+    @ResponseBody
+    public ActualWeatherTodayDto getActualWeather(@RequestBody Geolocation geolocation) {
 
         ActualWeatherTodayResponse response = openWeatherClient
-                .actualWeatherToday(weatherParamRequest.getApiKey(), weatherParamRequest.getId(),
+                .actualWeatherToday(
+                        weatherParamRequest.getApiKey(),
+                        geolocation.getLat(),
+                        geolocation.getLon(),
                         weatherParamRequest.getUnits());
 
         BigDecimal bd = new BigDecimal(response.getMain().getTemp());
@@ -66,10 +74,14 @@ public class RestService {
                 .build();
     }
 
-    @RequestMapping("/getForecastWeather")
-    List<ForecastWeatherDto> getForecastWeather() {
+    @RequestMapping(value = "/getForecastWeather", method = RequestMethod.POST, consumes = "application/json")
+    @ResponseBody
+    List<ForecastWeatherDto> getForecastWeather(@RequestBody Geolocation geolocation) {
         ForecastWeatherResponse response = openWeatherClient
-                .forecastWeatherList(weatherParamRequest.getApiKey(), weatherParamRequest.getId(),
+                .forecastWeatherList(
+                        weatherParamRequest.getApiKey(),
+                        geolocation.getLat(),
+                        geolocation.getLon(),
                         weatherParamRequest.getUnits());
 
         String todayDateAndTime = response.getForecastWeatherInfos().iterator().next().getDt_txt();
@@ -96,8 +108,6 @@ public class RestService {
         List<ForecastWeatherDto> forecastWeatherDto = new ArrayList<>();
 
         List<ForecastWeatherResponse.ForecastWeatherInfo> forecastWeatherInfos = response.getForecastWeatherInfos();
-
-
 
 
         for (ForecastWeatherResponse.ForecastWeatherInfo info : forecastWeatherInfos) {

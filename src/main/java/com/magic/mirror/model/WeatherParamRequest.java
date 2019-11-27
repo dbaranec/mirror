@@ -14,9 +14,6 @@ public class WeatherParamRequest {
     @Value("${feign.openWeather.apiKey}")
     public String apiKey;
 
-    @Value("${feign.openWeather.id}")
-    public String id;
-
     @Value("${feign.openWeather.units}")
     public String units;
 

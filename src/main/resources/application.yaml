@@ -6,7 +6,6 @@ logging:
 feign:
   openWeather:
     url: "http://api.openweathermap.org/data/2.5"
-    id: "3061186" #BS 3061184  #ZH 3056523 #BB 3061186
     apiKey: "1e96dde2ea8dafa8adb0446b7294bbe4"
     units: "metric"
 
