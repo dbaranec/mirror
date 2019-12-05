@@ -10,7 +10,7 @@ feign:
     units: "metric"
 
   nameDay:
-    url: "https://api.abalin.net/get"
+    url: "https://api.abalin.net"
     country: "sk"
     token: "Chrome"
 

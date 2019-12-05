@@ -31,7 +31,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Locale;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -93,16 +92,16 @@ public class RestService {
 
         String dayNames[] = new DateFormatSymbols().getWeekdays();
 
-        String dayOne = getDate(calendar , 1);
+        String dayOne = getDate(calendar, 1);
         String dayOneName = dayNames[calendar.get(Calendar.DAY_OF_WEEK)];
 
-        String dayTwo = getDate(calendar , 1);
+        String dayTwo = getDate(calendar, 1);
         String dayTwoName = dayNames[calendar.get(Calendar.DAY_OF_WEEK)];
 
-        String dayThree = getDate(calendar , 1);
+        String dayThree = getDate(calendar, 1);
         String dayThreeName = dayNames[calendar.get(Calendar.DAY_OF_WEEK)];
 
-        String dayFour = getDate(calendar , 1);
+        String dayFour = getDate(calendar, 1);
         String dayFourName = dayNames[calendar.get(Calendar.DAY_OF_WEEK)];
 
         List<ForecastWeatherDto> forecastWeatherDto = new ArrayList<>();
@@ -139,13 +138,13 @@ public class RestService {
         return df.format(unformatedDayOne);
     }
 
-    @RequestMapping("/getNameDayToday")
+    @RequestMapping(value = "/getNameDayToday", method = RequestMethod.GET, produces =
+            "application/json")
     NameDayTodayDto getNameDayToday() {
 
         NameDayTodayResponse response = abalinClient
                 .nameDayToday(nameDayTodayRequest.getCountry(), nameDayTodayRequest.getToken());
-
-        return NameDayTodayDto.builder().nameDayToday(response.getData().getNameDayToday()).build();
+        return NameDayTodayDto.builder().nameDayToday(response.getData().iterator().next().getNameDays().getName()).build();
     }
 
     @RequestMapping("/getQoute")
