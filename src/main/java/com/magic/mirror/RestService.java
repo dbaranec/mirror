@@ -1,7 +1,7 @@
 package com.magic.mirror;
 
 import com.magic.mirror.clients.AbalinClient;
-import com.magic.mirror.clients.ForismaticClient;
+import com.magic.mirror.clients.QouteClient;
 import com.magic.mirror.clients.OpenWeatherClient;
 import com.magic.mirror.model.ActualWeatherTodayDto;
 import com.magic.mirror.model.ActualWeatherTodayResponse;
@@ -14,6 +14,7 @@ import com.magic.mirror.model.NameDayTodayResponse;
 import com.magic.mirror.model.QouteRequest;
 import com.magic.mirror.model.QouteResponse;
 import com.magic.mirror.model.WeatherParamRequest;
+import com.magic.mirror.model.rest.QouteResponseOut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,7 +44,7 @@ public class RestService {
     private AbalinClient abalinClient;
 
     @Autowired
-    private ForismaticClient forismaticClient;
+    private QouteClient qouteClient;
 
     @Autowired
     private WeatherParamRequest weatherParamRequest;
@@ -148,15 +149,13 @@ public class RestService {
     }
 
     @RequestMapping("/getQoute")
-    QouteResponse getQoute() {
+    QouteResponseOut getQoute() {
 
-        QouteResponse qoute = forismaticClient
-                .getQoute(qouteRequest.getMethod(), qouteRequest.getKey(), qouteRequest.getFormat(),
-                        qouteRequest.getLang(), qouteRequest.getToken());
-        if (qoute.getQuoteAuthor().isEmpty()) {
-            qoute.setQuoteAuthor("Anonymous");
-        }
+        QouteResponse qoute = qouteClient.getQoute(qouteRequest.getLanguageCode());
 
-        return qoute;
+        QouteResponseOut qouteResponseOut = new QouteResponseOut();
+        qouteResponseOut.setQuoteAuthor(qoute.getOriginator().getName());
+        qouteResponseOut.setQuoteText(qoute.getContent());
+        return qouteResponseOut;
     }
 }

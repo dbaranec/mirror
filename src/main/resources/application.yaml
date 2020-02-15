@@ -15,9 +15,6 @@ feign:
     token: "Chrome"
 
   qoutes:
-    url: "https://api.forismatic.com/api/1.0/"
-    method: "getQuote"
-    key: "0"
-    format: "json"
-    lang: "en"
-    token: "Chrome"
+    url: "https://quotepark.com/api/quotes/"
+    language_code: "sk"
+

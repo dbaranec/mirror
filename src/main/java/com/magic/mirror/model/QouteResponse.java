@@ -1,7 +1,7 @@
 package com.magic.mirror.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,7 +10,13 @@ import lombok.Setter;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class QouteResponse {
 
-    String quoteText;
-    String quoteAuthor;
+    String content;
+    Originator originator;
 
+    @Getter
+    @Setter
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Originator {
+        String name;
+    }
 }

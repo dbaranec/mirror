@@ -10,11 +10,9 @@ import com.magic.mirror.model.QouteResponse;
 
 
 @FeignClient(name = "QouteCliet", url = "${feign.qoutes.url}")
-public interface ForismaticClient {
+public interface QouteClient {
 
-    @RequestMapping(method = RequestMethod.GET, value = "/weather")
-    QouteResponse getQoute(@RequestParam(value = "method") String method,
-            @RequestParam(value = "key") String key, @RequestParam(value = "format") String format,
-            @RequestParam(value = "lang") String lang, @RequestHeader("User-Agent") String token);
+    @RequestMapping(method = RequestMethod.GET, value = "/random")
+    QouteResponse getQoute(@RequestParam(value = "language_code") String languageCode);
 
 }
