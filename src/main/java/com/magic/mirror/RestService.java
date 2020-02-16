@@ -32,6 +32,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -91,7 +92,9 @@ public class RestService {
         Calendar calendar = new GregorianCalendar();
         calendar.set(Integer.valueOf(splits[0]), Integer.valueOf(splits[1]) - 1, Integer.valueOf(splits[2]));
 
-        String dayNames[] = new DateFormatSymbols().getWeekdays();
+        Locale id = new Locale("sk", "SK");
+        DateFormatSymbols dateFormatSymbols = new DateFormatSymbols(id);
+        String dayNames[] = dateFormatSymbols.getWeekdays();
 
         String dayOne = getDate(calendar, 1);
         String dayOneName = dayNames[calendar.get(Calendar.DAY_OF_WEEK)];
