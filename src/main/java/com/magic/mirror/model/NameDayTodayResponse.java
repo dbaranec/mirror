@@ -10,7 +10,7 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class NameDayTodayResponse {
 
-    List<Data> data;
+    Data data;
 
     @Getter
     @JsonIgnoreProperties(ignoreUnknown = true)

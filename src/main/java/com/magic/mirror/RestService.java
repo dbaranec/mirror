@@ -95,42 +95,19 @@ public class RestService {
         Locale id = new Locale("sk", "SK");
         DateFormatSymbols dateFormatSymbols = new DateFormatSymbols(id);
         String dayNames[] = dateFormatSymbols.getWeekdays();
-
-        String dayOne = getDate(calendar, 1);
-        String dayOneName = dayNames[calendar.get(Calendar.DAY_OF_WEEK)];
-
-        String dayTwo = getDate(calendar, 1);
-        String dayTwoName = dayNames[calendar.get(Calendar.DAY_OF_WEEK)];
-
-        String dayThree = getDate(calendar, 1);
-        String dayThreeName = dayNames[calendar.get(Calendar.DAY_OF_WEEK)];
-
-        String dayFour = getDate(calendar, 1);
-        String dayFourName = dayNames[calendar.get(Calendar.DAY_OF_WEEK)];
-
-        List<ForecastWeatherDto> forecastWeatherDto = new ArrayList<>();
-
+        String nextDay = getDate(calendar, 1);
         List<ForecastWeatherResponse.ForecastWeatherInfo> forecastWeatherInfos = response.getForecastWeatherInfos();
-
-
+        List<ForecastWeatherDto> forecastWeatherDto = new ArrayList<>();
         for (ForecastWeatherResponse.ForecastWeatherInfo info : forecastWeatherInfos) {
 
             String forecastTime = " 15:00:00";
-
             BigDecimal bd = new BigDecimal(info.getMain().getTemp());
             BigDecimal rounded = bd.setScale(0, BigDecimal.ROUND_HALF_UP);
-
-            if (info.getDt_txt().contains(dayOne + forecastTime)) {
-                forecastWeatherDto.add(ForecastWeatherDto.builder().dayName(dayOneName).icon(info.getWeathers().iterator().next().getIcon()).temp(String.valueOf(rounded)).build());
-            } else if (info.getDt_txt().contains(dayTwo + forecastTime)) {
-                forecastWeatherDto.add(ForecastWeatherDto.builder().dayName(dayTwoName).icon(info.getWeathers().iterator().next().getIcon()).temp(String.valueOf(rounded)).build());
-            } else if (info.getDt_txt().contains(dayThree + forecastTime)) {
-                forecastWeatherDto.add(ForecastWeatherDto.builder().dayName(dayThreeName).icon(info.getWeathers().iterator().next().getIcon()).temp(String.valueOf(rounded)).build());
-            } else if (info.getDt_txt().contains(dayFour + forecastTime)) {
-                forecastWeatherDto.add(ForecastWeatherDto.builder().dayName(dayFourName).icon(info.getWeathers().iterator().next().getIcon()).temp(String.valueOf(rounded)).build());
+            if (info.getDt_txt().contains(nextDay + forecastTime)) {
+                forecastWeatherDto.add(ForecastWeatherDto.builder().dayName(dayNames[calendar.get(Calendar.DAY_OF_WEEK)]).icon(info.getWeathers().iterator().next().getIcon()).temp(String.valueOf(rounded)).build());
+                nextDay = getDate(calendar, 1);
             }
         }
-
 
         return forecastWeatherDto;
     }
@@ -148,7 +125,7 @@ public class RestService {
 
         NameDayTodayResponse response = abalinClient
                 .nameDayToday(nameDayTodayRequest.getCountry(), nameDayTodayRequest.getToken());
-        return NameDayTodayDto.builder().nameDayToday(response.getData().iterator().next().getNameDays().getName()).build();
+        return NameDayTodayDto.builder().nameDayToday(response.getData().getNameDays().getName()).build();
     }
 
     @RequestMapping("/getQoute")
