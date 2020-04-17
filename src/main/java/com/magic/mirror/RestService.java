@@ -1,7 +1,6 @@
 package com.magic.mirror;
 
 import com.magic.mirror.clients.AbalinClient;
-import com.magic.mirror.clients.QouteClient;
 import com.magic.mirror.clients.OpenWeatherClient;
 import com.magic.mirror.model.ActualWeatherTodayDto;
 import com.magic.mirror.model.ActualWeatherTodayResponse;
@@ -11,8 +10,6 @@ import com.magic.mirror.model.Geolocation;
 import com.magic.mirror.model.NameDayTodayDto;
 import com.magic.mirror.model.NameDayTodayRequest;
 import com.magic.mirror.model.NameDayTodayResponse;
-import com.magic.mirror.model.QouteRequest;
-import com.magic.mirror.model.QouteResponse;
 import com.magic.mirror.model.WeatherParamRequest;
 import com.magic.mirror.model.rest.QouteResponseOut;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,16 +42,13 @@ public class RestService {
     private AbalinClient abalinClient;
 
     @Autowired
-    private QouteClient qouteClient;
-
-    @Autowired
     private WeatherParamRequest weatherParamRequest;
 
     @Autowired
     private NameDayTodayRequest nameDayTodayRequest;
 
     @Autowired
-    private QouteRequest qouteRequest;
+    private MirrorManager mirrorManager;
 
     @RequestMapping(value = "/getActualWeatherToday", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
@@ -130,12 +124,6 @@ public class RestService {
 
     @RequestMapping("/getQoute")
     QouteResponseOut getQoute() {
-
-        QouteResponse qoute = qouteClient.getQoute(qouteRequest.getLanguageCode());
-
-        QouteResponseOut qouteResponseOut = new QouteResponseOut();
-        qouteResponseOut.setQuoteAuthor(qoute.getOriginator().getName());
-        qouteResponseOut.setQuoteText(qoute.getContent());
-        return qouteResponseOut;
+        return mirrorManager.processQuote();
     }
 }

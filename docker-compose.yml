@@ -1,0 +1,13 @@
+version: '3.3'
+services:
+  mysql:
+    image: mysql:8.0.13
+    container_name: mirror_mysql
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: mirror_db
+      MYSQL_USER: developer
+      MYSQL_PASSWORD: developer
+      MYSQL_ROOT_PASSWORD: root

@@ -1,8 +1,23 @@
 logging:
   level:
     com.magic.mirror: DEBUG
-
-
+primary:
+#  datasource:
+#    url: "jdbc:mysql://localhost:3306/mirror_db?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC"
+#    username: developer
+#    password: developer
+#    ddl-auto: none
+#    dialect: org.hibernate.dialect.MySQL8Dialect
+#    show-sql: true
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+  datasource:
+    url: "jdbc:mysql://e7qyahb3d90mletd.chr7pe7iynqr.eu-west-1.rds.amazonaws.com:3306/m9qb26dhjihjaoit?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC"
+    username: v72i6kcavko6i0wf
+    password: g06pvkuce3bqwuaz
+    ddl-auto: none
+    dialect: org.hibernate.dialect.MySQL8Dialect
+    show-sql: true
+    driver-class-name: com.mysql.cj.jdbc.Driver
 feign:
   openWeather:
     url: "http://api.openweathermap.org/data/2.5"
