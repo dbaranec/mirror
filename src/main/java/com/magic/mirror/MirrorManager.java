@@ -36,8 +36,14 @@ public class MirrorManager {
     }
 
     private void saveNewQouteIfNotExist() {
-        QouteResponse qoute = qouteClient.getQoute(qouteRequest.getLanguageCode());
-        if (qoute.getContent().length() < MAX_QUETE_LENGTH) {
+        QouteResponse qoute = null;
+        try {
+            qoute = qouteClient.getQoute(qouteRequest.getLanguageCode());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (qoute != null && qoute.getContent().length() < MAX_QUETE_LENGTH) {
             if (!qouteService.findByText(qoute.getContent())) {
                 Qoute qouteEntity = new Qoute();
                 qouteEntity.setAuthor(qoute.getOriginator().getName());
