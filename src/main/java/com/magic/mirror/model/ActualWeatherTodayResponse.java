@@ -15,6 +15,7 @@ public class ActualWeatherTodayResponse {
     String city;
 
     Main main;
+    Wind wind;
 
     @JsonProperty("weather")
     List<Weather> weathers;
@@ -31,6 +32,13 @@ public class ActualWeatherTodayResponse {
     public static class Weather {
 
         String icon;
+    }
+
+    @Getter
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public class Wind {
+        Double speed;
+        Integer deg;
     }
 
 }

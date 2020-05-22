@@ -2,7 +2,7 @@ package com.magic.mirror;
 
 import com.magic.mirror.clients.AbalinClient;
 import com.magic.mirror.clients.OpenWeatherClient;
-import com.magic.mirror.model.ActualWeatherTodayDto;
+import com.magic.mirror.model.ActualWeatherTodayResponseOut;
 import com.magic.mirror.model.ActualWeatherTodayResponse;
 import com.magic.mirror.model.ForecastWeatherDto;
 import com.magic.mirror.model.ForecastWeatherResponse;
@@ -52,21 +52,8 @@ public class RestService {
 
     @RequestMapping(value = "/getActualWeatherToday", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
-    public ActualWeatherTodayDto getActualWeather(@RequestBody Geolocation geolocation) {
-
-        ActualWeatherTodayResponse response = openWeatherClient
-                .actualWeatherToday(
-                        weatherParamRequest.getApiKey(),
-                        geolocation.getLat(),
-                        geolocation.getLon(),
-                        weatherParamRequest.getUnits());
-
-        BigDecimal bd = new BigDecimal(response.getMain().getTemp());
-        BigDecimal roundedTemp = bd.setScale(0, BigDecimal.ROUND_HALF_UP);
-
-        return ActualWeatherTodayDto.builder().city(response.getCity()).temp(roundedTemp.toString())
-                .icon(response.getWeathers().iterator().next().getIcon())
-                .build();
+    public ActualWeatherTodayResponseOut getActualWeather(@RequestBody Geolocation geolocation) {
+         return mirrorManager.processActualWeather(geolocation);
     }
 
     @RequestMapping(value = "/getForecastWeather", method = RequestMethod.POST, consumes = "application/json")
