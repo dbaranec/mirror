@@ -32,4 +32,7 @@ feign:
   qoutes:
     url: "https://quotepark.com/api/quotes/"
     language_code: "sk"
+rss:
+  hnonline:
+    all: "https://articles.hnonline.sk/feed/rss2?category=hn-881"
 

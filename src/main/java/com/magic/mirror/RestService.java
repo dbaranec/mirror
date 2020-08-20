@@ -3,7 +3,6 @@ package com.magic.mirror;
 import com.magic.mirror.clients.AbalinClient;
 import com.magic.mirror.clients.OpenWeatherClient;
 import com.magic.mirror.model.ActualWeatherTodayResponseOut;
-import com.magic.mirror.model.ActualWeatherTodayResponse;
 import com.magic.mirror.model.ForecastWeatherDto;
 import com.magic.mirror.model.ForecastWeatherResponse;
 import com.magic.mirror.model.Geolocation;
@@ -12,6 +11,8 @@ import com.magic.mirror.model.NameDayTodayRequest;
 import com.magic.mirror.model.NameDayTodayResponse;
 import com.magic.mirror.model.WeatherParamRequest;
 import com.magic.mirror.model.rest.QouteResponseOut;
+import com.magic.mirror.model.rest.RssFeedsOut;
+import com.sun.syndication.io.FeedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.DateFormatSymbols;
@@ -49,6 +51,9 @@ public class RestService {
 
     @Autowired
     private MirrorManager mirrorManager;
+
+    @Autowired
+    private RSSFeedReader rssFeedReader;
 
     @RequestMapping(value = "/getActualWeatherToday", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
@@ -112,5 +117,10 @@ public class RestService {
     @RequestMapping("/getQoute")
     QouteResponseOut getQoute() {
         return mirrorManager.processQuote();
+    }
+
+    @RequestMapping("/rss")
+    public RssFeedsOut getRss() throws IOException, FeedException {
+        return rssFeedReader.readRss();
     }
 }
