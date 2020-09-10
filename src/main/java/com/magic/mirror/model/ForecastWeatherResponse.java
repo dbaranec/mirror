@@ -2,7 +2,6 @@ package com.magic.mirror.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Builder;
 import lombok.Getter;
 
 import java.util.List;
@@ -12,7 +11,7 @@ import java.util.List;
 public class ForecastWeatherResponse {
 
 
-    @JsonProperty("list")
+    @JsonProperty("daily")
     List<ForecastWeatherInfo> forecastWeatherInfos;
 
 
@@ -20,19 +19,26 @@ public class ForecastWeatherResponse {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class ForecastWeatherInfo {
 
+        @JsonProperty("temp")
         Main main;
 
         @JsonProperty("weather")
         List<Weather> weathers;
 
 
+        @JsonProperty("dt")
         String dt_txt;
+
+        String pop;
 
         @Getter
         @JsonIgnoreProperties(ignoreUnknown = true)
         public static class Main {
 
+            @JsonProperty("day")
             String temp;
+            String min;
+            String max;
         }
 
         @Getter

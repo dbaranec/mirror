@@ -17,5 +17,8 @@ public class WeatherParamRequest {
     @Value("${feign.openWeather.units}")
     public String units;
 
+    @Value("${feign.openWeather.exclude}")
+    public String exclude;
+
 }
 

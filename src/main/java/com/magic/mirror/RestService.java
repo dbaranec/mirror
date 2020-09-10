@@ -23,9 +23,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.text.DateFormat;
 import java.text.DateFormatSymbols;
-import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -58,7 +59,7 @@ public class RestService {
     @RequestMapping(value = "/getActualWeatherToday", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
     public ActualWeatherTodayResponseOut getActualWeather(@RequestBody Geolocation geolocation) {
-         return mirrorManager.processActualWeather(geolocation);
+        return mirrorManager.processActualWeather(geolocation);
     }
 
     @RequestMapping(value = "/getForecastWeather", method = RequestMethod.POST, consumes = "application/json")
@@ -69,40 +70,50 @@ public class RestService {
                         weatherParamRequest.getApiKey(),
                         geolocation.getLat(),
                         geolocation.getLon(),
-                        weatherParamRequest.getUnits());
+                        weatherParamRequest.getUnits(),
+                        weatherParamRequest.getExclude());
 
         String todayDateAndTime = response.getForecastWeatherInfos().iterator().next().getDt_txt();
-        String[] tokens = todayDateAndTime.split(" ");
-        String[] splits = tokens[0].split("-");
+        LocalDate localDate =
+                Instant.ofEpochMilli(Long.valueOf(todayDateAndTime) * 1000).atZone(ZoneId.systemDefault()).toLocalDate();
 
         Calendar calendar = new GregorianCalendar();
-        calendar.set(Integer.valueOf(splits[0]), Integer.valueOf(splits[1]) - 1, Integer.valueOf(splits[2]));
+        GregorianCalendar.from(localDate.atStartOfDay(ZoneId.systemDefault()));
 
         Locale id = new Locale("sk", "SK");
         DateFormatSymbols dateFormatSymbols = new DateFormatSymbols(id);
         String dayNames[] = dateFormatSymbols.getWeekdays();
-        String nextDay = getDate(calendar, 1);
         List<ForecastWeatherResponse.ForecastWeatherInfo> forecastWeatherInfos = response.getForecastWeatherInfos();
+
+        //remove actual day from list
+        forecastWeatherInfos.remove(0);
+        calendar.add(Calendar.DAY_OF_MONTH, 1);
+
         List<ForecastWeatherDto> forecastWeatherDto = new ArrayList<>();
         for (ForecastWeatherResponse.ForecastWeatherInfo info : forecastWeatherInfos) {
 
-            String forecastTime = " 15:00:00";
-            BigDecimal bd = new BigDecimal(info.getMain().getTemp());
-            BigDecimal rounded = bd.setScale(0, BigDecimal.ROUND_HALF_UP);
-            if (info.getDt_txt().contains(nextDay + forecastTime)) {
-                forecastWeatherDto.add(ForecastWeatherDto.builder().dayName(dayNames[calendar.get(Calendar.DAY_OF_WEEK)]).icon(info.getWeathers().iterator().next().getIcon()).temp(String.valueOf(rounded)).build());
-                nextDay = getDate(calendar, 1);
-            }
+            ForecastWeatherDto newForecastWeatherDto = new ForecastWeatherDto();
+            newForecastWeatherDto.setDayName(dayNames[calendar.get(Calendar.DAY_OF_WEEK)]);
+            newForecastWeatherDto.setIcon(info.getWeathers().iterator().next().getIcon());
+            newForecastWeatherDto.setPop(info.getPop());
+
+            BigDecimal temp = new BigDecimal(info.getMain().getTemp());
+            BigDecimal roundedTemp = temp.setScale(0, BigDecimal.ROUND_HALF_UP);
+            newForecastWeatherDto.setTemp(String.valueOf(roundedTemp));
+
+            BigDecimal tempMin = new BigDecimal(info.getMain().getMin());
+            BigDecimal roundedTempMin = tempMin.setScale(0, BigDecimal.ROUND_HALF_UP);
+            newForecastWeatherDto.setTempMin(String.valueOf(roundedTempMin));
+
+            BigDecimal tempMax = new BigDecimal(info.getMain().getMax());
+            BigDecimal roundedTempMax = tempMax.setScale(0, BigDecimal.ROUND_HALF_UP);
+            newForecastWeatherDto.setTempMax(String.valueOf(roundedTempMax));
+
+            forecastWeatherDto.add(newForecastWeatherDto);
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
         }
 
         return forecastWeatherDto;
-    }
-
-    private String getDate(Calendar calendar, int addDay) {
-        calendar.add(Calendar.DAY_OF_MONTH, addDay);
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        Date unformatedDayOne = calendar.getTime();
-        return df.format(unformatedDayOne);
     }
 
     @RequestMapping(value = "/getNameDayToday", method = RequestMethod.GET, produces =
@@ -122,5 +133,11 @@ public class RestService {
     @RequestMapping("/rss")
     public RssFeedsOut getRss() throws IOException, FeedException {
         return rssFeedReader.readRss();
+    }
+
+    private LocalDate convertToLocalDateViaMilisecond(Date dateToConvert) {
+        return Instant.ofEpochMilli(dateToConvert.getTime())
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
     }
 }

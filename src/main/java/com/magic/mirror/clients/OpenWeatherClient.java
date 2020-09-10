@@ -18,10 +18,11 @@ public interface OpenWeatherClient {
                                                   @RequestParam(value = "lon") String lon,
                                                   @RequestParam(value = "units") String units);
 
-    @RequestMapping(method = RequestMethod.GET, value = "/forecast")
+    @RequestMapping(method = RequestMethod.GET, value = "/onecall")
     ForecastWeatherResponse forecastWeatherList(@RequestParam(value = "apiKey") String apiKey,
                                                 @RequestParam(value = "lat") String lat,
                                                 @RequestParam(value = "lon") String lon,
-                                                @RequestParam(value = "units") String units);
+                                                @RequestParam(value = "units") String units,
+                                                @RequestParam(value = "exclude") String exclude);
 
 }

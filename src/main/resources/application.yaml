@@ -23,6 +23,7 @@ feign:
     url: "http://api.openweathermap.org/data/2.5"
     apiKey: "1e96dde2ea8dafa8adb0446b7294bbe4"
     units: "metric"
+    exclude: "minutely, hourly, current"
 
   nameDay:
     url: "https://api.abalin.net"
