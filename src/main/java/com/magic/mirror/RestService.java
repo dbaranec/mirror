@@ -86,8 +86,8 @@ public class RestService {
         List<ForecastWeatherResponse.ForecastWeatherInfo> forecastWeatherInfos = response.getForecastWeatherInfos();
 
         //remove actual day from list
-        forecastWeatherInfos.remove(0);
-        calendar.add(Calendar.DAY_OF_MONTH, 1);
+        /*forecastWeatherInfos.remove(0);
+        calendar.add(Calendar.DAY_OF_MONTH, 1);*/
 
         List<ForecastWeatherDto> forecastWeatherDto = new ArrayList<>();
         for (ForecastWeatherResponse.ForecastWeatherInfo info : forecastWeatherInfos) {
