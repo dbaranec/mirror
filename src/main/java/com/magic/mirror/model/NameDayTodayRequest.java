@@ -14,8 +14,5 @@ public class NameDayTodayRequest {
     @Value("${feign.nameDay.country}")
     public String country;
 
-    @Value("${feign.nameDay.token}")
-    public String token;
-
 }
 

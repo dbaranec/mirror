@@ -11,7 +11,7 @@ import com.magic.mirror.model.NameDayTodayResponse;
 @FeignClient(name = "AbalinClient", url = "${feign.nameDay.url}")
 public interface AbalinClient {
 
-    @RequestMapping(method = RequestMethod.GET, value = "/today")
-    NameDayTodayResponse nameDayToday(@RequestParam(value = "country") String country, @RequestHeader("User-Agent") String token);
+    @RequestMapping(method = RequestMethod.POST, value = "/today")
+    NameDayTodayResponse nameDayToday(@RequestParam(value = "country") String country);
 }
 

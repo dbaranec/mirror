@@ -121,7 +121,7 @@ public class RestService {
     NameDayTodayDto getNameDayToday() {
 
         NameDayTodayResponse response = abalinClient
-                .nameDayToday(nameDayTodayRequest.getCountry(), nameDayTodayRequest.getToken());
+                .nameDayToday(nameDayTodayRequest.getCountry());
         return NameDayTodayDto.builder().nameDayToday(response.getData().getNameDays().getName()).build();
     }
 
