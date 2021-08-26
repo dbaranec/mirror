@@ -26,9 +26,8 @@ feign:
     exclude: "minutely, hourly, current"
 
   nameDay:
-    url: "https://api.abalin.net"
+    url: "https://nameday.abalin.net"
     country: "sk"
-    token: "Chrome"
 
   qoutes:
     url: "https://quotepark.com/api/quotes/"
