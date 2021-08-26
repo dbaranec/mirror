@@ -11,7 +11,7 @@ primary:
 #    show-sql: true
 #    driver-class-name: com.mysql.cj.jdbc.Driver
   datasource:
-    url: "jdbc:mysql://e7qyahb3d90mletd.chr7pe7iynqr.eu-west-1.rds.amazonaws.com:3306/m9qb26dhjihjaoit?allowPublicKeyRetrieval=true&useSSL=false&enabledTLSProtocols=TLSv1.2&serverTimezone=UTC"
+    url: "jdbc:mysql://e7qyahb3d90mletd.chr7pe7iynqr.eu-west-1.rds.amazonaws.com:3306/m9qb26dhjihjaoit?enabledTLSProtocols=TLSv1.2&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC"
     username: v72i6kcavko6i0wf
     password: g06pvkuce3bqwuaz
     ddl-auto: none
